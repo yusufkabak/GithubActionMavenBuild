@@ -1,3 +1,14 @@
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+env:
+  mavenGoal: "clean install"
+  imageName: "yusuf-springboot-mavent"
+  imageTag: "v1"
 jobs:
   build:
     runs-on: ubuntu-latest
