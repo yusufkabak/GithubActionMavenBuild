@@ -57,7 +57,8 @@ jobs:
     - name: Build and Push Docker Image
       with:
         context: .
-        run: |
-          docker build -t ${{ env.imageName }}:${{ env.imageTag }} .
-          echo ${{ secrets.DOCKER_TOKEN }} | docker login docker.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker push ${{ env.imageName }}:${{ env.imageTag }}
+      run: |
+        cd $GITHUB_WORKSPACE
+        docker build -t ${{ env.imageName }}:${{ env.imageTag }} .
+        echo ${{ secrets.DOCKER_TOKEN }} | docker login docker.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker push ${{ env.imageName }}:${{ env.imageTag }}
