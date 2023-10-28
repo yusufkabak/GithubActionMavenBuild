@@ -1,12 +1,5 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+#New yusuf
 
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Java CI with Maven
 
 on:
   push:
@@ -17,6 +10,7 @@ on:
 
 env:
   mavenGoal: "clean install"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,33 +24,18 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+
+    - name: Cache Maven Dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
     - name: Build with Maven
       run: "mvn -B ${mavenGoal} --file ${buildScript}"
     - uses: actions/upload-artifact@v3
       with:
        name: buildArtifact
        path: target/*.war      
-      
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-     - uses: actions/download-artifact@v3
-       with:
-         name: buildArtifact
-     - name: Production Deployment
-       run: |
-          ls -lart 
-     - name: scp ssh pipelines
-       uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-       env:
-         LASTSSH: "Doing something after copying"
-       with:
-         host: ${{ secrets.DC_HOST }}
-         user: ${{ secrets.DC_USER }}
-         key: ${{ secrets.DC_KEY }}
-         scp: |
-          ./*.war => /tmp/
-         last_ssh: |
-            sudo cp /tmp/*.war /var/lib/tomcat9/webapps/ 
-            ls -la
