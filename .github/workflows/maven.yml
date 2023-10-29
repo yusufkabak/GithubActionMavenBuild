@@ -66,4 +66,4 @@ jobs:
         ls -alrt
         docker build -t yusufkabak/${{ env.imageName }}:${{ env.imageTag }} .
         echo ${{ secrets.DOCKER_TOKEN }} | docker login docker.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-        #docker push yusufkabak/${{ env.imageName }}:${{ env.imageTag }}
+        docker push yusufkabak/${{ env.imageName }}:${{ env.imageTag }}
